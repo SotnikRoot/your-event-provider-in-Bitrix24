@@ -22,7 +22,7 @@
 - Пробрасывает события для не-локальных URL через стандартный механизм
 - Ведёт лог отправок для отладки
 
-## Структура (Урезаной версии провайдера)
+## [Структура (Урезаной версии провайдера)](https://github.com/SotnikRoot/your-event-provider-in-Bitrix24/tree/main/local.chatbot_v1.0.1/local.chatbot)
 ```
 local.chatbot/
 ├── install/
@@ -35,7 +35,7 @@ local.chatbot/
 └── EventProvider.php — провайдер: перехват и прямая отправка событий
 ```
 
-## Структура (Полной версии провайдера)
+## [Структура (Полной версии провайдера)](https://github.com/SotnikRoot/your-event-provider-in-Bitrix24/tree/main/local.authprovider_v1.0.0/local.authprovider)
 ```
 /local/modules/local.authprovider/
 ├── install/
