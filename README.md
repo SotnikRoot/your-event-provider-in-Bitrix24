@@ -80,6 +80,55 @@ $localPatterns = array(
 );
 ```
 
+Если будет возникать ошибка верификации то необходимо добавить эту строку ```$http->disableSslVerification();```.
+
+```
+public function send(array $queryData)
+    {
+        $http = new \Bitrix\Main\Web\HttpClient(array(
+            'socketTimeout' => 5,
+            'streamTimeout' => 10,
+            'redirect'     => true,
+            'redirectMax' => 3,
+        ));
+        $remainingData = array();
+        foreach ($queryData as $key => $item)
+        {
+            if (!empty($item['query']['QUERY_URL']))
+            {
+                $url = $item['query']['QUERY_URL'];
+                if ($this->isLocalUrl($url))
+                {
+                    $this->log("Sending event directly to: " . $url);
+                    $postData = $item['query']['QUERY_DATA'];
+                    $http->disableSslVerification(); // Добавленая строка!!!
+                    $result = $http->post($url, $postData);
+                    $this->log("Response code: " . $http->getStatus() . ", body: " . substr($result, 0, 500));
+                }
+                else
+                {
+                    $remainingData[] = $item;
+                }
+            }
+            else
+            {
+                $remainingData[] = $item;
+            }
+        }
+        if (count($remainingData) > 0)
+        {
+            try
+            {
+                parent::send(array_values($remainingData));
+            }
+            catch (\Exception $e)
+            {
+                $this->log("Parent send failed: " . $e->getMessage());
+            }
+        }
+    }
+```
+
 ### 3. Установка через админку
 Перейдите:
 Администрирование → Marketplace → Установленные решения → Доступные решения
